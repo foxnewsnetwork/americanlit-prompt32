@@ -50,8 +50,12 @@
 #undef STARCRAFTREADER_API
 #endif
 
+
 #ifdef STARCRAFTREADER_EXPORTS
 #define STARCRAFTREADER_API   __declspec(dllexport)
 #else
 #define STARCRAFTREADER_API   __declspec(dllimport)
-#endif
+#endif 
+
+// #define STARCRAFTREADER_API_EXPORT __declspec(dllexport)
+// #define STARCRAFTREADER_API_IMPORT __declspec(dllexport)

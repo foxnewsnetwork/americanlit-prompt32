@@ -1,14 +1,15 @@
 #pragma once
+#undef AFX_DATA
+#define AFX_DATA AFX_EXT_DATA
 
-
-class AFX_EXT_CLASS StarcraftGameState
+class STARCRAFTREADER_API StarcraftGameState
 {
 public:
 	bool GameStart;
 	int GameTimer;
 };
 
-class AFX_EXT_CLASS StarcraftPlayerState
+class STARCRAFTREADER_API StarcraftPlayerState
 {
 public:
 	__int8 status; //0x0000
@@ -82,7 +83,7 @@ public:
 		
 };
 
-class AFX_EXT_CLASS StarcraftUnitState
+class STARCRAFTREADER_API StarcraftUnitState
 {
 public:
 	WORD times_used; //0x0000  
@@ -153,7 +154,7 @@ public:
 };
 
 
-class AFX_EXT_CLASS StarcraftAPI
+class STARCRAFTREADER_API StarcraftAPI
 {
 public:
 	static StarcraftAPI& Initialize( );
@@ -186,3 +187,5 @@ protected:
 	
 };
 
+#undef AFX_DATA
+#define AFX_DATA

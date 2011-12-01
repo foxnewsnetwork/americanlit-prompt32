@@ -23,7 +23,7 @@ StarcraftAPI::~StarcraftAPI(void)
 
 StarcraftAPI& StarcraftAPI::Initialize(void)
 {
-	StarcraftAPI * myapi;
+	StarcraftAPI * myapi = 0;
 
 	// Step 0: Find the SC2 Process handle
 	DWORD processId;
@@ -58,6 +58,7 @@ BOOL StarcraftAPI::GetGameState(__out StarcraftGameState * gamestate)
 	// Step 2: Get the timer and such
 	// NOT IMPLEMENTED
 
+	return TRUE;
 }
 
 BOOL StarcraftAPI::GetPlayerState(__out StarcraftPlayerState * playerstate)
@@ -124,6 +125,61 @@ BOOL StarcraftAPI::GetPlayerState(__out StarcraftPlayerState * playerstate)
 
 int StarcraftAPI::GetUnitState(__out StarcraftUnitState * unitstate)
 {
+	// Step 1: initializing the variable
+	unitstate = new StarcraftUnitState[this->unitCount];
+
+	// Step 2: updating from the game
+	this->UpdatePlayer();
+	this->UpdateUnit();
+
+	// Step 3: Now we've got to do it (with regex in php)
+	for(int k = 0; k < this->unitCount; k++)
+	{
+		unitstate[k].model = this->myunit[k].model;
+		unitstate[k].playerOwner = this->myunit[k].playerOwner;
+		unitstate[k].isAlive = this->myunit[k].isAlive;
+		unitstate[k].isPaused = this->myunit[k].isPaused;
+		unitstate[k].kills = this->myunit[k].kills;
+		unitstate[k].positionX = this->myunit[k].positionX;
+		unitstate[k].positionY = this->myunit[k].positionY;
+		unitstate[k].positionZ = this->myunit[k].positionZ;
+		unitstate[k].rotationX = this->myunit[k].rotationX;
+		unitstate[k].rotationY = this->myunit[k].rotationY;
+		unitstate[k].rotation = this->myunit[k].rotation;
+		unitstate[k].destinationX = this->myunit[k].destinationX;
+		unitstate[k].destinationY = this->myunit[k].destinationY;
+		unitstate[k].destinationZ = this->myunit[k].destinationZ;
+		unitstate[k].lastOrder = this->myunit[k].lastOrder;
+		unitstate[k].startPositionX = this->myunit[k].startPositionX;
+		unitstate[k].startPositionY = this->myunit[k].startPositionY;
+		unitstate[k].moveSpeed = this->myunit[k].moveSpeed;
+		unitstate[k].commandQueue = this->myunit[k].commandQueue;
+		unitstate[k].healthDamage = this->myunit[k].healthDamage;
+		unitstate[k].shieldDamage = this->myunit[k].shieldDamage;
+		unitstate[k].energyDamage = this->myunit[k].energyDamage;
+		unitstate[k].healthMax = this->myunit[k].healthMax;
+		unitstate[k].shieldMax = this->myunit[k].shieldMax;
+		unitstate[k].energyMax = this->myunit[k].energyMax;
+		unitstate[k].healthMultiplier = this->myunit[k].healthMultiplier;
+		unitstate[k].shieldMultiplier = this->myunit[k].shieldMultiplier;
+		unitstate[k].energyMultiplier = this->myunit[k].energyMultiplier;
+		unitstate[k].lifespan = this->myunit[k].lifespan;
+		unitstate[k].lastAttacked = this->myunit[k].lastAttacked;
+		unitstate[k].bountyMinerals = this->myunit[k].bountyMinerals;
+		unitstate[k].bountyVespene = this->myunit[k].bountyVespene;
+		unitstate[k].bountyTerrazine = this->myunit[k].bountyTerrazine;
+		unitstate[k].bountyCustom = this->myunit[k].bountyCustom;
+		unitstate[k].bountyXP = this->myunit[k].bountyXP;
+		unitstate[k].cellX_Approx = this->myunit[k].cellX_Approx;
+		unitstate[k].cellY_Approx = this->myunit[k].cellY_Approx;
+		unitstate[k].times_used = this->myunit[k].times_used;
+		unitstate[k].id = this->myunit[k].id;
+		unitstate[k].previous_id = this->myunit[k].previous_id;
+		unitstate[k].next_id = this->myunit[k].next_id;
+	}
+
+	// Step 4: we're done
+	return this->unitCount;
 }
 
 BOOL StarcraftAPI::FindMyProcess(__in WCHAR processName[MAX_PATH] , __out DWORD & processId)
@@ -260,6 +316,6 @@ void StarcraftAPI::UpdatePlayer(void)
 void StarcraftAPI::UpdateUnit(void)
 {
 	SIZE_T bytesRead;
-	ReadProcessMemory(this->processHandle, (void*)this->unitOffset, (void*)this->myunit, sizeof(Unit)
+	ReadProcessMemory(this->processHandle, (void*)this->unitOffset, (void*)this->myunit, sizeof(Unit), &bytesRead);
 	
 }
